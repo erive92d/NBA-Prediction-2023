@@ -2,7 +2,7 @@ const express = require("express")
 const path = require("path")
 const fs = require("fs")
 const dataBase = require("./db/db.json")
-const PORT = 3001 || process.env.PORT
+const PORT = process.env.PORT || 3001
 
 const app = express()
 
