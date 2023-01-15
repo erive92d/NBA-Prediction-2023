@@ -16,7 +16,14 @@ app.get('/',(req,res)=> {
 })
 
 app.get('/getreasons',(req,res)=> {
-    res.json(dataBase)
+    fs.readFile('./db/db.json','utf-8',(err,data)=>{
+        if(err) {
+            console.log(err)
+        } else {
+            const jsonData = JSON.parse(data)
+            res.json(jsonData)
+        }
+    })
 })
 
 app.post('/reasons',(req,res)=> {

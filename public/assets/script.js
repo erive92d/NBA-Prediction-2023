@@ -14,62 +14,65 @@ const fetchPostData = (items) =>
             'Content-Type':'application/json'
         },
         body: JSON.stringify(items)
+    }) 
+    .then((response)=>response.json())
+    .then((data) => {
+        data
+        getRenderItems(items);
     })
+    .catch((error)=> console.error(error))
 
 
 
 
 const fetchGetData = () =>
     fetch('/getreasons')
-    .then((res)=>res.json())
-    .then((data)=>{
-        
-        return data
-    })
+    .then((res) => res.json())
+    .then((data) => data)
+    .catch((error)=>console.error(error))
+    
 
-const getRenderItems =  (info)  => {
-    console.log(info)
+const getRenderItems =  (items)  => {
+    // console.log(info)
     
+    console.log(items)
     
-    info.forEach((items)=> {
         const cardDiv = document.createElement('div')
         const newH1 = document.createElement('h1')
         const newP = document.createElement('p')
         const newName = document.createElement('p')
         cardDiv.classList.add('card')
        
-        newH1.textContent = items.teamname
-        newP.textContent = items.reason
-        newName.textContent = 'sent by '+ items.name
+        newH1.innerHTML = items.teamname
+        newP.innerHTML = items.reason
+        newName.innerHTML = 'sent by '+ items.name
         
         cardDiv.append(newH1,newP,newName)
         containerEl.append(cardDiv)
 
-    })
+   
    
 }
 
 
-const postDataHandler = () => {
-    
-    let review = {
+const postDataHandler = (e) => {
+    e.preventDefault()
+    const review = {
         username: usernameInput.value.trim(),
         teamname: teamInput.value.trim(),
         reason: reasonInput.value.trim()
     }
 
-    fetchPostData(review).then((response)=>response.json()).then((data)=> {
-        return data
-    })
+    fetchPostData(review)
+    }
 
 
-}
 
 
-const renderFetch = () => fetchGetData().then(getRenderItems)
 
-    
-renderFetch()
+fetchGetData().then((data)=>data.forEach((items)=>getRenderItems(items)))
+
+
 
 
 formEl.addEventListener('submit',postDataHandler)
