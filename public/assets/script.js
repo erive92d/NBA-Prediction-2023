@@ -5,6 +5,8 @@ const containerEl = document.querySelector('.container')
 const usernameInput = document.getElementById("username")
 
 
+const activeArray =[]
+
 const fetchPostData = (items) => 
     fetch('/reasons',{
         method:'POST',
@@ -25,26 +27,31 @@ const fetchGetData = () =>
         return data
     })
 
-const getRenderItems = (items)  => {
-    console.log(items)
+const getRenderItems =  (info)  => {
+    console.log(info)
     
-    const cardDiv = document.createElement('div')
-    const newH1 = document.createElement('h1')
-    const newP = document.createElement('p')
-    const newName = document.createElement('p')
-    cardDiv.classList.add('card')
-    console.log(items)
-    newH1.textContent = items.teamname
-    newP.textContent = items.reason
-    newName.textContent = 'sent by '+ items.name
     
-    cardDiv.append(newH1,newP,newName)
-    containerEl.append(cardDiv)
+    info.forEach((items)=> {
+        const cardDiv = document.createElement('div')
+        const newH1 = document.createElement('h1')
+        const newP = document.createElement('p')
+        const newName = document.createElement('p')
+        cardDiv.classList.add('card')
+       
+        newH1.textContent = items.teamname
+        newP.textContent = items.reason
+        newName.textContent = 'sent by '+ items.name
+        
+        cardDiv.append(newH1,newP,newName)
+        containerEl.append(cardDiv)
+
+    })
+   
 }
 
 
-const postDataHandler = (e) => {
-    e.preventDefault()
+const postDataHandler = () => {
+    
     let review = {
         username: usernameInput.value.trim(),
         teamname: teamInput.value.trim(),
@@ -55,10 +62,14 @@ const postDataHandler = (e) => {
         return data
     })
 
-    
+
 }
 
-fetchGetData().then((response)=>response.forEach((items)=>getRenderItems(items)))
+
+const renderFetch = () => fetchGetData().then(getRenderItems)
+
+    
+renderFetch()
 
 
 formEl.addEventListener('submit',postDataHandler)
